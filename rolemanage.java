@@ -1,7 +1,7 @@
 import java.util.*;
 
 
-abstract class roletypes {
+abstract class rolemanage {
     
     Map<Integer, String> roles = new HashMap<>(){
         
@@ -22,8 +22,23 @@ abstract class roletypes {
         if (roleId <= 0) {
             throw new IllegalArgumentException("Invalid role ID");
         }
+        else if (!roles.containsKey(roleId)) {
+            throw new NoSuchElementException("Role ID does not exist");
+        } else if (roles.get(roleId) == null || roles.get(roleId).isEmpty()) {
+            throw new NoSuchElementException("Role name is empty");
+        } else  {
         return roles.get(roleId);
+        }
+    } 
+
+
+    void roledelete(int roleId) {
+        if (roleId <= 0) {
+            throw new IllegalArgumentException("Invalid role ID");
+        } else if (!roles.containsKey(roleId)) {
+            throw new NoSuchElementException("Role ID does not exist");
+        } else {
+            roles.remove(roleId);
+        }
     }
-
-
 }
