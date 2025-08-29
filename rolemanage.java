@@ -1,7 +1,11 @@
 import java.util.*;
 
+ 
+
 
 abstract class rolemanage {
+
+    // This class serves as a base for managing roles
     
     Map<Integer, String> roles = new HashMap<>(){
         
