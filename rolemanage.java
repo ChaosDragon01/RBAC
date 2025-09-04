@@ -1,16 +1,17 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
  
 
 
-abstract class rolemanage {
+public class rolemanage extends storage{
 
-    // This class serves as a base for managing roles
-    
-    Map<Integer, String> roles = new HashMap<>(){
         
-    };
 
+    private Map<Integer, String> roles = new HashMap<>(){};
+
+    
     void rolecreate(int roleId, String roleName) {
         if (roleId <= 0 || roleName == null || roleName.isEmpty()) {
             throw new IllegalArgumentException("Invalid role ID or name");
@@ -22,20 +23,20 @@ abstract class rolemanage {
 
     }
 
-    String roleget(int roleId) {
+    boolean roleEX; 
+    boolean roleget(int roleId) {
         if (roleId <= 0) {
             throw new IllegalArgumentException("Invalid role ID");
         }
         else if (!roles.containsKey(roleId)) {
-            throw new NoSuchElementException("Role ID does not exist");
+            roleEX = false;
+            return roleEX;
         } else if (roles.get(roleId) == null || roles.get(roleId).isEmpty()) {
             throw new NoSuchElementException("Role name is empty");
         } else  {
         return roles.get(roleId);
         }
-    } 
-
-
+    } // I am so fuckiing confused if I should keep this or refractor the code because I think Keeping too much files is not good for the project
     void roledelete(int roleId) {
         if (roleId <= 0) {
             throw new IllegalArgumentException("Invalid role ID");
@@ -44,5 +45,7 @@ abstract class rolemanage {
         } else {
             roles.remove(roleId);
         }
-    }
+    }   
 }
+
+
