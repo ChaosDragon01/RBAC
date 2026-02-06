@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home • RBAC</title>
+    <link rel="stylesheet" th:href="@{/styles/style.css}">
+</head>
+<body class="glass-bg">
+
+<div class="glass-card wide">
+    <h1>RBAC Dashboard</h1>
+    <p class="subtitle">
+        Logged in as
+        <strong th:text="${#authentication.name}"></strong>
+    </p>
+
+    <div class="actions">
+        <a href="/admin" class="btn admin">Admin Panel</a>
+        <a href="/user" class="btn user">User Area</a>
+    </div>
+
+    <form th:action="@{/logout}" method="post">
+        <button class="logout">Logout</button>
+    </form>
+</div>
+
+</body>
+</html>
