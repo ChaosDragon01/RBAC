@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <div class="glass-card">
+        <h1>Welcome!</h1>
+        <p>You are logged in as <span th:text="${#authentication.name}">User</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+</body>
+</html>
