@@ -1,0 +1,102 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Body Background */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    background-attachment: fixed;
+}
+
+/* Frosted Glass Container */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 50px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* Headings */
+.glass-card h1 {
+    color: white;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+/* Inputs */
+.glass-card input[type="text"],
+.glass-card input[type="password"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0 20px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.glass-card input[type="text"]:focus,
+.glass-card input[type="password"]:focus {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Buttons */
+.glass-card button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.glass-card button:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Links */
+.glass-card a {
+    display: block;
+    margin-top: 15px;
+    color: white;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.glass-card a:hover {
+    text-decoration: underline;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
