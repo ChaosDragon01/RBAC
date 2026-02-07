@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="glass-container">
+        <h1>User Dashboard</h1>
+        
+        <p>Welcome, <span sec:authentication="name" style="font-weight:bold;">User</span>!</p>
+
+        <div class="badge">
+            Access Level: Standard
+        </div>
+
+        <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+            Your personal dashboard is ready.
+        </p>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn">Log Out</button>
+        </form>
+    </div>
+</body>
+</html>
