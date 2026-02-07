@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Home • RBAC</title>
-    <link rel="stylesheet" th:href="@{/styles/style.css}">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
-<body class="glass-bg">
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-<div class="glass-card wide">
-    <h1>RBAC Dashboard</h1>
-    <p class="subtitle">
-        Logged in as
-        <strong th:text="${#authentication.name}"></strong>
-    </p>
+    <div class="glass-container">
+        <h1>User Dashboard</h1>
+        
+        <p>Welcome, <span sec:authentication="name" style="font-weight:bold;">User</span>!</p>
 
-    <div class="actions">
-        <a href="/admin" class="btn admin">Admin Panel</a>
-        <a href="/user" class="btn user">User Area</a>
+        <div class="badge">
+            Access Level: Standard
+        </div>
+
+        <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+            Your personal dashboard is ready.
+        </p>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn">Log Out</button>
+        </form>
     </div>
-
-    <form th:action="@{/logout}" method="post">
-        <button class="logout">Logout</button>
-    </form>
-</div>
-
 </body>
 </html>
