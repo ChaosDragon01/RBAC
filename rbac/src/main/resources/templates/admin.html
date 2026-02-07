@@ -1,28 +1,226 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Home • RBAC</title>
-    <link rel="stylesheet" th:href="@{/styles/style.css}">
+    <title>System Dashboard</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            document.getElementById('btn-' + tabName).classList.add('active');
+        }
+    </script>
 </head>
-<body class="glass-bg">
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-<div class="glass-card wide">
-    <h1>RBAC Dashboard</h1>
-    <p class="subtitle">
-        Logged in as
-        <strong th:text="${#authentication.name}"></strong>
-    </p>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h1>System Dashboard</h1>
+                <p style="color: var(--text-light);">RBAC Administration & Data Center</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                 <a href="/admin/database" class="action-btn" style="text-decoration:none; background: #eef2ff; color: #4a90e2; border: 1px solid #dbeafe;">
+                    📂 Database View
+                 </a>
+                 <div style="height: 30px; border-left: 1px solid rgba(0,0,0,0.1); margin: 0 10px;"></div>
+                 <span>Hello, <b sec:authentication="name">Admin</b></span>
+                <form th:action="@{/logout}" method="post" style="margin-left: 10px;">
+                    <button type="submit" class="action-btn" style="color: #cc4444; border-color: #fca5a5; background: #fef2f2;">Logout</button>
+                </form>
+            </div>
+        </div>
 
-    <div class="actions">
-        <a href="/admin" class="btn admin">Admin Panel</a>
-        <a href="/user" class="btn user">User Area</a>
+        <div class="alert-area">
+            <div th:if="${param.success}" class="glass-alert alert-success">
+                <span>✨</span>
+                <div style="flex:1">
+                    <span style="display:block; font-weight:700; font-size:0.9rem;">Success</span>
+                    <span style="font-size:0.85rem; opacity:0.9;" th:text="${param.success}">Action completed</span>
+                </div>
+                <button onclick="this.parentElement.style.display='none'" class="alert-close">×</button>
+            </div>
+
+            <div th:if="${param.error}" class="glass-alert alert-error">
+                <span>⚠️</span>
+                <div style="flex:1">
+                    <span style="display:block; font-weight:700; font-size:0.9rem;">Error</span>
+                    <span style="font-size:0.85rem; opacity:0.9;" th:text="${param.error}">Something went wrong</span>
+                </div>
+                <button onclick="this.parentElement.style.display='none'" class="alert-close">×</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button id="btn-users" class="tab-btn active" onclick="openTab('users')">User Management</button>
+            <button id="btn-roles" class="tab-btn" onclick="openTab('roles')">Role Definitions</button>
+        </div>
+
+        <div id="users" class="tab-content active glass-panel">
+            
+            <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.5);">
+                <h2 style="margin-bottom: 1rem;">Add New User</h2>
+                
+                <form th:action="@{/admin/create-user}" method="post" class="admin-form" id="addUserForm" novalidate 
+                      style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 15px; align-items: start;">
+                    
+                    <div class="input-wrapper">
+                        <label style="font-size: 0.8rem; margin-bottom: 5px; display: block;">Username</label>
+                        <input type="text" name="username" class="admin-input" placeholder="e.g. jdoe" required>
+                        <div class="error-tooltip">Username required</div>
+                    </div>
+                    
+                    <div class="input-wrapper">
+                        <label style="font-size: 0.8rem; margin-bottom: 5px; display: block;">Email</label>
+                        <input type="email" name="email" class="admin-input" placeholder="user@example.com" required>
+                        <div class="error-tooltip">Valid email required</div>
+                    </div>
+                    
+                    <div class="input-wrapper">
+                        <label style="font-size: 0.8rem; margin-bottom: 5px; display: block;">Password</label>
+                        <input type="password" name="password" class="admin-input" placeholder="••••••" required>
+                        <div class="error-tooltip">Password required</div>
+                    </div>
+                     
+                    <div class="input-wrapper">
+                        <label style="font-size: 0.8rem; margin-bottom: 5px; display: block;">Initial Role</label>
+                         <select name="initialRole" class="admin-input">
+                            <option value="USER">USER</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="action-btn" style="background: var(--accent); color: white; border: none; margin-top: 24px;">+ Add</button>
+                </form>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; margin-bottom:1rem; align-items: center;">
+                <h2>Active Users</h2>
+                <span class="role-badge" th:text="${users.size()} + ' Users'"></span>
+            </div>
+
+            <table class="glass-table">
+                <thead>
+                    <tr>
+                        <th>User Info</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td>
+                            <div style="font-weight:600; color: var(--text-dark);" th:text="${user.username}">Username</div>
+                            <div style="font-size:0.75rem; color:#999;" 
+                                 th:text="'ID: ...' + ${(user.id.length() > 6 ? user.id.substring(user.id.length() - 6) : user.id)}">
+                            </div>
+                        </td>
+                        <td th:text="${user.email}" style="color: var(--text-light);">user@example.com</td>
+                        <td>
+                            <span th:each="role : ${user.roles}" th:text="${role}" class="role-badge" style="margin-right:5px; font-size: 0.75rem;">ROLE</span>
+                        </td>
+                        <td style="display:flex; gap: 8px;">
+                            <a th:href="@{/admin/edit-user/{id}(id=${user.id})}" class="action-btn" style="text-decoration:none; font-size:0.85rem; padding: 6px 12px;">✏️</a>
+                            
+                            <form th:action="@{/admin/reset-password}" method="post" style="display:inline;">
+                                <input type="hidden" name="userId" th:value="${user.id}">
+                                <input type="hidden" name="newPassword" value="password123">
+                                <button type="submit" class="action-btn" style="font-size:0.85rem; padding: 6px 12px; background: #fff7ed; color:#ea580c; border-color: #ffedd5;" 
+                                        onclick="return confirm('Reset password?')">🔑</button>
+                            </form>
+
+                            <form th:action="@{/admin/delete-user}" method="post" style="display:inline;">
+                                <input type="hidden" name="id" th:value="${user.id}">
+                                <button type="submit" class="btn-delete" style="font-size:0.85rem; padding: 6px 12px;" 
+                                        onclick="return confirm('Delete user?')">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="roles" class="tab-content glass-panel">
+            <div class="dashboard-grid">
+                <div>
+                    <h2 style="margin-bottom: 1rem;">Create New Role</h2>
+                    <form th:action="@{/admin/create-role}" method="post" class="admin-form">
+                        <label>Role Name</label>
+                        <input type="text" name="roleName" class="admin-input" placeholder="e.g. MODERATOR" required>
+                        <label>Inherits From (Parent)</label>
+                        <select name="parentRole" class="admin-input">
+                            <option value="NONE">None (Top Level)</option>
+                            <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+                        </select>
+                        <button type="submit" class="action-btn" style="margin-top: 1rem;">Create Role</button>
+                    </form>
+                </div>
+                <div style="border-left: 1px solid rgba(255,255,255,0.5); padding-left: 2rem;">
+                    <h2 style="margin-bottom: 1rem;">Existing Roles</h2>
+                    <ul style="list-style:none; padding:0;">
+                        <li th:each="role : ${roles}" style="margin-bottom:10px; padding:15px; background:rgba(255,255,255,0.4); border-radius:12px; display:flex; justify-content:space-between; align-items:center; border: 1px solid rgba(255,255,255,0.6);">
+                            <div>
+                                <strong th:text="${role.name}" style="font-size:1.1rem; color: var(--accent);">ROLE</strong><br>
+                                <small style="color:#666;" th:text="${role.parentRole == 'NONE'} ? 'Top Level' : '↳ Reports to ' + ${role.parentRole}"></small>
+                            </div>
+                            <form th:action="@{/admin/delete-role}" method="post">
+                                <input type="hidden" name="id" th:value="${role.id}">
+                                <button type="submit" class="btn-delete" onclick="return confirm('Delete role?')">Delete</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <form th:action="@{/logout}" method="post">
-        <button class="logout">Logout</button>
-    </form>
-</div>
+    <script>
+        // 1. Auto-Hide Alerts
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.glass-alert');
+            alerts.forEach(function(alert) {
+                alert.style.transition = "opacity 0.5s ease";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.style.display = "none", 500);
+            });
+        }, 5000);
 
+        // 2. Custom Validation Logic (Liquid Tooltips)
+        const form = document.getElementById('addUserForm');
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+            const inputs = form.querySelectorAll('input[required]');
+
+            inputs.forEach(input => {
+                // Find tooltip in the same wrapper
+                const wrapper = input.closest('.input-wrapper');
+                const tooltip = wrapper ? wrapper.querySelector('.error-tooltip') : null;
+                
+                if (tooltip) {
+                    if (!input.value.trim()) {
+                        event.preventDefault();
+                        input.classList.add('input-error');
+                        tooltip.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('input-error');
+                        tooltip.classList.remove('visible');
+                    }
+                    // Clear on type
+                    input.addEventListener('input', () => {
+                        input.classList.remove('input-error');
+                        tooltip.classList.remove('visible');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

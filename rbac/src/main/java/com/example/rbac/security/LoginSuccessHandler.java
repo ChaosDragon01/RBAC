@@ -1,8 +1,10 @@
 package com.example.rbac.security;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,14 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException, ServletException {
-        response.sendRedirect("/home");
+        
+        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+
+        // UPDATE: Check for both naming conventions
+        if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_ADMINISTRATOR")) {
+            response.sendRedirect("/admin");
+        } else {
+            response.sendRedirect("/home");
+        }
     }
 }

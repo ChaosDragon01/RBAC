@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Database Inspector</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div style="max-width: 1000px; margin: 0 auto; padding: 2rem;">
+        
+        <div style="margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center;">
+            <h1>Database Inspector</h1>
+            <a href="/admin" class="action-btn" style="text-decoration:none;">← Back to Dashboard</a>
+        </div>
+
+        <div class="glass-panel" style="margin-bottom: 2rem;">
+            <h2>Collection: users</h2>
+            <div th:each="user : ${rawUsers}" class="db-code-block" style="margin-bottom: 10px;">
+                {<br>
+                &nbsp;&nbsp;<span class="json-key">"_id"</span>: "<span th:text="${user.id}"></span>",<br>
+                &nbsp;&nbsp;<span class="json-key">"username"</span>: "<span th:text="${user.username}" class="json-val"></span>",<br>
+                &nbsp;&nbsp;<span class="json-key">"roles"</span>: <span th:text="${user.roles}"></span>,<br>
+                &nbsp;&nbsp;<span class="json-key">"password"</span>: "<span th:text="${user.password.substring(0,10)}"></span>..." <span style="color:#999">// Hashed</span><br>
+                }
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2>Collection: roles</h2>
+            <table class="glass-table">
+                <thead><tr><th>ID</th><th>Name</th><th>Parent</th></tr></thead>
+                <tbody>
+                    <tr th:each="role : ${rawRoles}">
+                        <td th:text="${role.id}" style="font-family:monospace; font-size:0.9rem;"></td>
+                        <td th:text="${role.name}"></td>
+                        <td th:text="${role.parentRole}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>

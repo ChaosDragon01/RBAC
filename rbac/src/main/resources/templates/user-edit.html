@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit User</title>
+    <link rel="stylesheet" href="/styles/admin.css">
+    <style>
+        /* Extra styles specific to the checkbox list */
+        .role-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="dashboard-grid" style="display: flex; justify-content: center;">
+        
+        <div class="glass-panel" style="width: 100%; max-width: 500px;">
+            <h2>Edit User</h2>
+            
+            <form th:action="@{/admin/update-user}" method="post" class="admin-form">
+                
+                <input type="hidden" name="id" th:value="${user.id}">
+
+                <label>Username</label>
+                <input type="text" name="username" class="admin-input" 
+                       th:value="${user.username}" required>
+
+                <label style="margin-top: 1rem;">Assign Roles</label>
+                <div class="role-selector">
+                    <label th:each="role : ${allRoles}" class="checkbox-label">
+                        <input type="checkbox" name="roles" 
+                               th:value="${role.name}"
+                               th:checked="${#sets.contains(user.roles, role.name)}">
+                        <span th:text="${role.name}">ROLE_NAME</span>
+                        <small style="color: #666;" th:if="${role.parentRole != 'NONE'}">
+                             (Reports to <span th:text="${role.parentRole}"></span>)
+                        </small>
+                    </label>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="action-btn" style="flex: 1; background: var(--accent); color: white;">Save Changes</button>
+                    <a href="/admin" class="action-btn" style="flex: 1; text-align: center; text-decoration: none; color: var(--text-dark);">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>

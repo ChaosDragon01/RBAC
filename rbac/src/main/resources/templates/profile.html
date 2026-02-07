@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="glass-container">
+        <h1>My Profile</h1>
+        <div class="badge" style="margin-bottom: 2rem;">
+            <span th:text="${user.username}">User</span>
+        </div>
+
+        <div th:if="${param.success}" class="badge" style="background:#dcfce7; color:#166534; border:1px solid #bbf7d0; margin-bottom:1rem;">
+            Profile Updated!
+        </div>
+
+        <form th:action="@{/profile/update}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}">
+            
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" name="email" th:value="${user.email}" placeholder="Add an email for recovery">
+            </div>
+
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid rgba(255,255,255,0.5);">
+
+        <a href="/profile/password" class="btn" style="background: rgba(255,255,255,0.3); margin-bottom: 1rem;">Change Password</a>
+        <a href="/home" style="text-decoration:none; color: #666; font-size: 0.9rem;">Back to Dashboard</a>
+    </div>
+</body>
+</html>
