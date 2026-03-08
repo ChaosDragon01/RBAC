@@ -26,4 +26,4 @@ The application architecture leverages Spring Web for MVC routing and Spring Sec
 * **Backend Framework:** Java, Spring Boot
 * **Security & Routing:** Spring Security, Spring Web
 * **Frontend Layer:** HTML5, CSS3, JavaScript
-* **Database:** MongoDB
+* **Database:** ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
